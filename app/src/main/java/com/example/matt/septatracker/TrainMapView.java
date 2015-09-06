@@ -17,6 +17,10 @@ public class TrainMapView extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_train_map_view);
         setUpMapIfNeeded();
+
+        GetTrainLocations getTrainLocations = new GetTrainLocations();
+        getTrainLocations.execute(mMap);
+
     }
 
     @Override
@@ -60,6 +64,6 @@ public class TrainMapView extends FragmentActivity {
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
-        mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+
     }
 }

@@ -43,7 +43,7 @@ public class SplashScreen extends Activity {
             @Override
             public void run() {
                 /* Create an Intent that will start the Menu-Activity. */
-                Intent mainIntent = new Intent(SplashScreen.this,MainActivity.class);
+                Intent mainIntent = new Intent(SplashScreen.this, MainActivity.class);
 
                 // Send over the hashtable of station data to the main screen to be put into the scrollers
                 mainIntent.putStringArrayListExtra("stationData", stationData);

@@ -5,7 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
@@ -23,17 +25,27 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         Spinner sourceSpinner = (Spinner) findViewById(R.id.sourceSpinner);
-        Spinner destSpinner = (Spinner) findViewById(R.id.destSpinner);
+        Spinner destSpinner   = (Spinner) findViewById(R.id.destSpinner);
+        Button mapButton = (Button) findViewById(R.id.mapButton);
+
+        mapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent mapIntent = new Intent(MainActivity.this, TrainMapView.class);
+                MainActivity.this.startActivity(mapIntent);
+            }
+        });
 
         ArrayList<String> stationNames = null;
 
         //If the activity has been given an intent with station data in it, then fill up the spinners
-        if(intent.hasExtra("stationData")){
+        if(intent.hasExtra("stationData"))
             stationNames = intent.getStringArrayListExtra("stationData");
-        }
 
+        //Create the array adapter to send the station names onto the spinners for selection
         ArrayAdapter<String> adapter = new ArrayAdapter(this , android.R.layout.simple_spinner_item , stationNames);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         sourceSpinner.setAdapter(adapter);
         destSpinner.setAdapter(adapter);
     }
