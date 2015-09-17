@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
         Spinner sourceSpinner = (Spinner) findViewById(R.id.sourceSpinner);
         Spinner destSpinner   = (Spinner) findViewById(R.id.destSpinner);
-        Button mapButton = (Button) findViewById(R.id.mapButton);
+        Button mapButton      = (Button) findViewById(R.id.mapButton);
 
         mapButton.setOnClickListener(new View.OnClickListener() {
             @Override

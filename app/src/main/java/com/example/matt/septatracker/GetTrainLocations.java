@@ -1,35 +1,39 @@
 package com.example.matt.septatracker;
 
 import android.os.AsyncTask;
-import android.util.JsonReader;
 import android.util.Log;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import org.json.JSONArray;
+
 
 /**
  * Created by Matt on 9/5/15.
  */
-public class GetTrainLocations extends AsyncTask<GoogleMap, Void, GoogleMap> {
+public class GetTrainLocations extends AsyncTask<Void, Void, JsonArray> {
     // http://www3.septa.org/hackathon/TrainView/
 
-    protected GoogleMap doInBackground(GoogleMap... mMaps) {
-        if(mMaps.length > 1){
-            Log.e("error", "invalid number of arguments!");
-            return null;
-        }
+    private GoogleMap mMap;
+
+    public GetTrainLocations(GoogleMap mMap){
+        this.mMap = mMap;
+    }
+
+    protected JsonArray doInBackground(Void... params) {
 
     try {
         URL septaApiUrl = new URL("http://www3.septa.org/hackathon/TrainView/");
@@ -39,6 +43,7 @@ public class GetTrainLocations extends AsyncTask<GoogleMap, Void, GoogleMap> {
         JsonArray result = (JsonArray) jsonParser.parse(new InputStreamReader(conn.getInputStream()));
 
         Log.d("Request Response:", result.toString());
+        return result;
 
 
     }catch (MalformedURLException e){
@@ -46,11 +51,21 @@ public class GetTrainLocations extends AsyncTask<GoogleMap, Void, GoogleMap> {
     }catch (IOException e){
         Log.e("error", e.getMessage());
     }
-        return mMaps[0];
+        return null;
     }
 
-    protected void onPostExecute(GoogleMap result) {
-        result.addMarker(new MarkerOptions().position(new LatLng(40.01151, -75.19327)).title("Marker"));
+    protected void onPostExecute(JsonArray result) {
+        for(JsonElement train : result){
+            JsonObject trainObject = (JsonObject) train;
+            float lat = trainObject.get("lat").getAsFloat();
+            float lon = trainObject.get("lon").getAsFloat();
+            String trainName = trainObject.get("trainno").getAsString();
+
+            mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lon)).title(trainName));
+
+        }
+
+
     }
 
 }

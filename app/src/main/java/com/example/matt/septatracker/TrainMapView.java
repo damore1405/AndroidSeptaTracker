@@ -3,10 +3,10 @@ package com.example.matt.septatracker;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 public class TrainMapView extends FragmentActivity {
 
@@ -18,8 +18,7 @@ public class TrainMapView extends FragmentActivity {
         setContentView(R.layout.activity_train_map_view);
         setUpMapIfNeeded();
 
-        GetTrainLocations getTrainLocations = new GetTrainLocations();
-        getTrainLocations.execute(mMap);
+        new GetTrainLocations(mMap).execute();
 
     }
 
@@ -64,6 +63,11 @@ public class TrainMapView extends FragmentActivity {
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
-
+        //  set up the default map view so that the map starts at the corrent place and zoom, with some traffic because why not.
+        mMap.setTrafficEnabled(true);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                new LatLng(39.954263, -75.189080),
+                9.0f));
+        /* Set the lat lon to that of university city philadelphia */
     }
 }
